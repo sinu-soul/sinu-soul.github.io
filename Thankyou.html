@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>عيد ميلاد علي</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* صفحة تسجيل الدخول */
+#loginPage{
+  background:#dc143c;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.loginBox{
+  background:#f5f5dc;
+  padding:40px;
+  border-radius:40px;
+  box-shadow:0 0 20px black;
+}
+
+input{
+  display:block;
+  margin:15px auto;
+  padding:10px;
+  border-radius:30px;
+  border:none;
+  width:200px;
+  text-align:center;
+}
+
+button{
+  padding:10px 20px;
+  border-radius:20px;
+  border:none;
+  cursor:pointer;
+}
+
+/* شاشة العرض */
+#main{
+  background:black;
+  height:100vh;
+  display:none;
+  color:white;
+  position:relative;
+}
+
+/* الصور */
+.gallery{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  display:none;
+  flex-wrap:wrap;
+  width:80%;
+  justify-content:center;
+}
+
+.gallery img{
+  width:150px;
+  margin:10px;
+  border-radius:10px;
+}
+
+.caption{
+  font-size:14px;
+}
+
+/* الظرف */
+#envelope{
+  display:none;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  cursor:pointer;
+}
+
+#letter{
+  display:none;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:white;
+  color:black;
+  padding:40px;
+  width:60%;
+  border-radius:10px;
+  text-align:right;
+  direction:rtl;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- موسيقى -->
+<audio id="music" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- تسجيل الدخول -->
+<div id="loginPage">
+  <div class="loginBox">
+    <h2>ادخل الاسم و العمر</h2>
+    <input id="name" placeholder="الاسم">
+    <input id="age" placeholder="العمر">
+    <button onclick="login()">دخول</button>
+  </div>
+</div>
+
+<!-- الشاشة الرئيسية -->
+<div id="main">
+  <canvas id="canvas"></canvas>
+
+  <div class="gallery" id="gallery"></div>
+
+  <div id="envelope">
+    <img src="envelope.png" width="200">
+    <p>اضغط</p>
+  </div>
+
+  <div id="letter">
+    <p id="message"></p>
+  </div>
+</div>
+
+<script>
+// تسجيل الدخول
+function login(){
+  let age = document.getElementById("age").value;
+  if(age==18){
+    document.getElementById("loginPage").style.display="none";
+    document.getElementById("main").style.display="block";
+    document.getElementById("music").play();
+    startShow();
+  } else{
+    alert("العمر غير صحيح");
+  }
+}
+
+/* عرض الصور بعد التأثيرات */
+function startShow(){
+  // هنا يمكنك إضافة تأثير الزهرة والحبيبات لاحقًا
+  setTimeout(showImages,150000); // بعد دقيقتين و30 ثانية تقريبًا
+}
+
+function showImages(){
+  let gallery = document.getElementById("gallery");
+  gallery.style.display="flex";
+  for(let i=1;i<=50;i++){
+    let div = document.createElement("div");
+    div.innerHTML=`
+      <img src="images/${i}.jpg">
+      <div class="caption">كل عام و انت بخير</div>
+    `;
+    gallery.appendChild(div);
+  }
+  setTimeout(showEnvelope,60000); // بعد 60 ثانية تظهر الظرف
+}
+
+function showEnvelope(){
+  document.getElementById("gallery").style.display="none";
+  document.getElementById("envelope").style.display="block";
+}
+
+// الرسالة بالتأثير الكتابي
+let text = `علوش ي علوش كل سنه و انت طيب ي معاق و عقبال ال١٠٠ شمعه ي رب 
+اينعم معرفكش من فتره طويله بس انت غبي طول عمره و هتفضل غبي حتى لو مكنتش كدا و اتجوز بسرعه علشان تطلع من قائمة  القي اللي عندي😂
+و بما انك ١٨ سنه دلوقتي عايزه اصدمك و اقولك انت هتعمل نتيجة غباوتك من النهارده و حبيت اذكرك لان القانون لا يحمي المغفلين 
+و ان شاءالله السنه دي دتكون بداية خير و بركه عليك اللهم هب ل هذا المتخلف ثروه يتعجب لها من في الأرض و السماء و يكون في مستوى الثراء الفاحش افحش شي و ي رب تحقق كل أمنياتك و كل اللي نفسك في و ي رب هب له حبك و حب من بحبك و حب عمل صالح يقربه الي حبك و اجعل كل ساعه من حياته تقربا إليك و لا تأخذه من هذه الدنيا إلا و انت راضي عنه 
+المهم بعد مكملنا دعاوي الشحاتين ديت😂😂😂 عايزه اقولك كل سنه و انت طيب ي علي و ربنا يكون معاك و يبعد عنك كل وحِش و كل ظلم و اللهم لا يجعلك من الظالمين ي خادمي`;
+
+let i = 0;
+function typeWriter(){
+  if(i < text.length){
+    document.getElementById("message").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter,40);
+  }
+}
+
+// عند الضغط على الظرف
+document.getElementById("envelope").onclick = function(){
+  document.getElementById("envelope").style.display="none";
+  document.getElementById("letter").style.display="block";
+  typeWriter();
+}
+
+</script>
+
+</body>
+</html>
